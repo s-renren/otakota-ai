@@ -28,6 +28,7 @@
     "typecheck": "tsc --noEmit"
   },
   "prisma": {
+
     "seed": "node -r esbuild-register prisma/seed.ts"
   },
   "dependencies": {
