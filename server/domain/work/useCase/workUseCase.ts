@@ -5,7 +5,7 @@ import { workEvent } from '../event/workEvent';
 import { workMethod } from '../model/workMethod';
 import { novelQuery } from '../repository/novelQuery';
 import { workCommand } from '../repository/workCommand';
-import { getContentKey } from '../servise/getS3key';
+import { getContentKey, getImageKey } from '../servise/getS3key';
 
 export const workUseCase = {
   create: (novelUrl: string): Promise<LoadingWorkEntity> =>
@@ -25,7 +25,7 @@ export const workUseCase = {
       const completeWork = await workMethod.complete(loadingwork);
 
       await workCommand.save(tx, completeWork);
-      await s3.putImage(`works/${loadingwork.id}/image.png`, image);
+      await s3.putImage(getImageKey(completeWork.id), image);
     }),
 
   failure: (loadingWork: LoadingWorkEntity, errorMsg: string): Promise<void> =>

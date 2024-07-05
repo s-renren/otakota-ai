@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { getContentKey } from '../servise/getS3key';
 
 const toWorkEntity = async (prismaWork: Work): Promise<WorkEntity> => {
-  const id = brandedId.work.entity.parse(prismaWork);
+  const id = brandedId.work.entity.parse(prismaWork.id);
   const status = z.enum(WORK_STATUSES).parse(prismaWork.status);
   const contentUrl = await s3.getSignedUrl(getContentKey(id));
 
