@@ -9,6 +9,7 @@
     "dev:frourio": "frourio --watch",
     "dev:prisma": "prisma generate --watch",
     "prebuild": "run-p generate migrate:deploy",
+    "batch": "node -r esbuild-register tests/batch.ts",
     "build": "node ./scripts/build.prod.js",
     "lint": "run-p lint:js lint:prettier lint:prisma",
     "lint:js": "eslint --ext .ts,.js --ignore-path .gitignore .",
@@ -45,6 +46,7 @@
     "fastify": "^4.26.2",
     "get-jwks": "^9.0.1",
     "iconv-lite": "^0.6.3",
+    "openai": "^4.52.3",
     "ulid": "^2.3.0",
     "velona": "^0.8.0",
     "zod": "^3.23.6"
@@ -59,6 +61,7 @@
     "esbuild-node-externals": "^1.13.0",
     "esbuild-register": "^3.5.0",
     "frourio": "^1.0.1",
+    "msw": "^2.3.1",
     "node-dev": "^8.0.0",
     "notios": "^0.4.1",
     "prisma": "^5.13.0",

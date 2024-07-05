@@ -1,8 +1,8 @@
-import { LoadingWorkEntity } from 'api/@types/work';
+import { CompletedWorkEntity, LoadingWorkEntity } from 'api/@types/work';
 import { brandedId } from 'service/brandedId';
 import { ulid } from 'ulid';
 
-export const workMEthod = {
+export const workMethod = {
   create: (val: { novelUrl: string; title: string; author: string }): LoadingWorkEntity => {
     return {
       id: brandedId.work.entity.parse(ulid()),
@@ -13,6 +13,13 @@ export const workMEthod = {
       createdTime: Date.now(),
       imageUrl: null,
       errorMsg: null,
+    };
+  },
+  complete: (loadingWork: LoadingWorkEntity): CompletedWorkEntity => {
+    return {
+      ...loadingWork,
+      status: 'completed',
+      imageUrl: '',
     };
   },
 };

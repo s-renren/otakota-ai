@@ -10,7 +10,7 @@ export const novelQuery = {
     author: string;
   }> => {
     const data = await fetch(novelUrl).then((b) => b.arrayBuffer());
-    const html = decode(Buffer.from(data), 'Shift-JIS');
+    const html = decode(Buffer.from(data), 'Shift_JIS');
     const $ = load(html);
     const title = $('.title').text();
     const author = $('.author').text();
