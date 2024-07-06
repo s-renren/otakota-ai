@@ -4,7 +4,7 @@ import { WorkEntity } from 'api/@types/work';
 import { brandedId } from 'service/brandedId';
 import { s3 } from 'service/s3Client';
 import { z } from 'zod';
-import { getContentKey } from '../servise/getS3key';
+import { getContentKey, getImageKey } from '../servise/getS3key';
 
 const toWorkEntity = async (prismaWork: Work): Promise<WorkEntity> => {
   const id = brandedId.work.entity.parse(prismaWork.id);
@@ -14,7 +14,7 @@ const toWorkEntity = async (prismaWork: Work): Promise<WorkEntity> => {
   switch (status) {
     case 'loading':
       return {
-        id: brandedId.work.entity.parse(prismaWork.id),
+        id,
         status,
         novelUrl: prismaWork.novelUrl,
         title: prismaWork.title,
@@ -26,19 +26,19 @@ const toWorkEntity = async (prismaWork: Work): Promise<WorkEntity> => {
       };
     case 'completed':
       return {
-        id: brandedId.work.entity.parse(prismaWork.id),
+        id,
         status,
         novelUrl: prismaWork.novelUrl,
         title: prismaWork.title,
         author: prismaWork.author,
         contentUrl,
         createdTime: prismaWork.createdAt.getTime(),
-        imageUrl: 'null',
+        imageUrl: await s3.getSignedUrl(getImageKey(id)),
         errorMsg: null,
       };
     case 'failed':
       return {
-        id: brandedId.work.entity.parse(prismaWork.id),
+        id,
         status,
         novelUrl: prismaWork.novelUrl,
         title: prismaWork.title,
@@ -56,5 +56,7 @@ const toWorkEntity = async (prismaWork: Work): Promise<WorkEntity> => {
 
 export const workQuery = {
   listAll: (tx: Prisma.TransactionClient): Promise<WorkEntity[]> =>
-    tx.work.findMany().then((works) => Promise.all(works.map(toWorkEntity))),
+    tx.work
+      .findMany({ orderBy: { createdAt: 'desc' } })
+      .then((works) => Promise.all(works.map(toWorkEntity))),
 };
