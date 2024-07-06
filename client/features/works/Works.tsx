@@ -21,7 +21,7 @@ const MainContent = (props: { work: WorkEntity; contentDict: ContentDict }) => {
 
     case 'completed':
       return (
-        <div className={styles.workImage}>
+        <div className={styles.imageFrame}>
           <img src={props.work.imageUrl} alt={props.work.title} className={styles.workImage} />
           <div
             className={styles.contentText}
